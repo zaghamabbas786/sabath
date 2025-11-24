@@ -62,8 +62,8 @@ NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
 # App URL
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 
-# Gemini AI (get from ai.google.dev)
-NEXT_PUBLIC_GEMINI_API_KEY=xxxxx
+# Gemini AI (get from ai.google.dev) - Server-side only for security
+GEMINI_API_KEY=xxxxx
 ```
 
 **No Stripe keys needed!** Clerk handles billing for you.
@@ -140,9 +140,11 @@ sabbath-health/
 ├── app/
 │   ├── api/
 │   │   ├── check-subscription/    # Check Clerk metadata
-│   │   └── create-checkout/       # Redirect to billing
+│   │   ├── create-checkout/       # Redirect to billing
+│   │   └── generate-healing/      # Gemini AI backend (secure)
 │   ├── sign-in/                   # Auth pages
 │   ├── sign-up/
+│   ├── pricing/                   # Pricing page
 │   ├── layout.tsx                 # Root layout
 │   └── page.tsx                   # Home page
 ├── components/
@@ -173,7 +175,7 @@ NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
 NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
 NEXT_PUBLIC_APP_URL=https://yourdomain.com
-NEXT_PUBLIC_GEMINI_API_KEY=xxxxx
+GEMINI_API_KEY=xxxxx
 ```
 
 Configure billing in Clerk Dashboard instead of managing Stripe keys!
@@ -182,6 +184,7 @@ Configure billing in Clerk Dashboard instead of managing Stripe keys!
 
 - ✅ All routes protected by Clerk middleware (except public pages)
 - ✅ API routes verify authentication server-side
+- ✅ **Gemini API key is server-side only** (not exposed to browser)
 - ✅ Clerk handles all billing securely
 - ✅ Subscription status in Clerk metadata
 - ✅ No sensitive payment data in your code
