@@ -202,7 +202,7 @@ const CategoryAccordion = ({ onSelect, isLoading }: { onSelect: (symptom: string
       </p>
 
       <div className="w-full flex flex-col gap-3">
-        {SYMPTOM_CATEGORIES.map((category) => {
+        {SYMPTOM_CATEGORIES?.map((category) => {
           const isOpen = expandedId === category.id;
           return (
             <div 
@@ -224,7 +224,7 @@ const CategoryAccordion = ({ onSelect, isLoading }: { onSelect: (symptom: string
               {isOpen && (
                 <div className="px-5 pb-6 animate-slide-down">
                   <div className="flex flex-wrap gap-2">
-                    {category.options.map((option) => (
+                    {category.options?.map((option) => (
                       <button
                         key={option}
                         onClick={() => onSelect(option)}
@@ -326,13 +326,13 @@ const PaywallView = ({
 
 const ResultView = ({ data, onReset }: { data: HealingResponse, onReset: () => void }) => {
   // Enforce "I understand" logic client-side as well
-  const introText = data.what_i_am_hearing.replace(/^My heart hears/i, "I understand");
+  const introText = (data?.what_i_am_hearing || "I hear your heart.").replace(/^My heart hears/i, "I understand");
 
   return (
     <div className="animate-fade-in w-full max-w-3xl mx-auto pb-16 px-6 text-left">
       
       {/* Prominent Medical Warning Banner */}
-      {data.is_medical_warning && (
+      {data?.is_medical_warning && (
         <div className="w-full mb-12 animate-slide-down relative group">
           <div className="absolute inset-0 bg-red-600 rounded-2xl opacity-10 group-hover:opacity-15 transition-opacity"></div>
           <div className="relative bg-white border-l-8 border-red-600 rounded-r-2xl p-6 md:p-8 shadow-md flex flex-col sm:flex-row items-start sm:items-center gap-6">
@@ -367,14 +367,14 @@ const ResultView = ({ data, onReset }: { data: HealingResponse, onReset: () => v
       </section>
 
       {/* Body Connection (Minor Context) */}
-      {data.body_connection.length > 0 && (
+      {data?.body_connection?.length > 0 && (
         <section className="mb-20 bg-white/50 p-8 rounded-3xl border border-sabbath-subtle/30">
            <h3 className="font-sans font-bold text-lg text-sabbath-clay mb-4 flex items-center gap-3">
              <div className="w-2 h-2 rounded-full bg-sabbath-clay"></div>
              Physical Connection
            </h3>
            <ul className="space-y-3">
-             {data.body_connection.map((item, i) => (
+             {data.body_connection?.map((item, i) => (
                <li key={i} className="text-sabbath-espresso/90 font-sans text-[19px] leading-relaxed">
                  {item}
                </li>
@@ -384,20 +384,23 @@ const ResultView = ({ data, onReset }: { data: HealingResponse, onReset: () => v
       )}
 
       {/* Section 2: Emotional Roots (Expanded) */}
+      {data?.emotional_roots?.length > 0 && (
       <section className="mb-24">
         <h3 className="font-serif text-3xl text-sabbath-espresso mb-8 pb-4 border-b border-sabbath-subtle">
           Emotional Landscape
         </h3>
         <div className="space-y-6">
-          {data.emotional_roots.map((paragraph, i) => (
+          {data.emotional_roots?.map((paragraph, i) => (
             <p key={i} className="text-sabbath-espresso/90 font-sans text-[19px] leading-[1.6]">
               {paragraph}
             </p>
           ))}
         </div>
       </section>
+      )}
 
       {/* Section 3: Spiritual Roots (Expanded & Stanza-based) */}
+      {data?.spiritual_roots?.length > 0 && (
       <section className="mb-24 bg-sabbath-ivory p-10 md:p-12 rounded-[2rem] border border-sabbath-subtle/50 relative overflow-hidden">
         <div className="absolute -top-20 -right-20 w-64 h-64 bg-sabbath-gold/10 rounded-full blur-3xl pointer-events-none"></div>
         
@@ -406,19 +409,20 @@ const ResultView = ({ data, onReset }: { data: HealingResponse, onReset: () => v
         </h3>
         
         <div className="space-y-10 relative z-10">
-          {data.spiritual_roots.map((stanza, i) => (
+          {data?.spiritual_roots?.map((stanza, i) => (
             <div key={i}>
               <p className="text-sabbath-espresso/90 font-sans text-[19px] leading-[1.8] tracking-wide">
                 {stanza}
               </p>
               {/* Small separator between stanzas for visual breath */}
-              {i < data.spiritual_roots.length - 1 && (
+              {i < data?.spiritual_roots?.length - 1 && (
                 <div className="w-12 h-[1px] bg-sabbath-gold/30 mt-10 mb-2"></div>
               )}
             </div>
           ))}
         </div>
       </section>
+      )}
 
       {/* Section 4: Scripture */}
       <section className="mb-24">
@@ -426,7 +430,7 @@ const ResultView = ({ data, onReset }: { data: HealingResponse, onReset: () => v
           Anchors of Truth
         </h3>
         <div className="space-y-10">
-          {data.scripture_anchors.map((anchor, i) => (
+          {data.scripture_anchors?.map((anchor, i) => (
             <div key={i} className="bg-white p-8 rounded-2xl border-l-4 border-sabbath-moss shadow-sm">
               <p className="font-serif text-2xl text-sabbath-espresso leading-relaxed italic mb-4">
                 &quot;{anchor.text}&quot;
@@ -449,7 +453,7 @@ const ResultView = ({ data, onReset }: { data: HealingResponse, onReset: () => v
         </div>
         
         <div className="space-y-12">
-           {data.guided_prayer.map((stanza, i) => (
+           {data.guided_prayer?.map((stanza, i) => (
              <div key={i} className="relative">
                <p className="font-serif text-[21px] leading-[1.9] text-sabbath-espresso/90 italic">
                  {stanza}
@@ -469,7 +473,7 @@ const ResultView = ({ data, onReset }: { data: HealingResponse, onReset: () => v
         </h3>
         
         <div className="space-y-12">
-          {data.seven_day_program.map((day, i) => (
+          {data?.seven_day_program?.map((day, i) => (
             <div key={i} className="relative pl-6 border-l border-sabbath-subtle group hover:border-sabbath-gold transition-colors">
               <div className="absolute -left-[5px] top-2 w-[9px] h-[9px] rounded-full bg-sabbath-subtle group-hover:bg-sabbath-gold transition-colors"></div>
               
@@ -668,24 +672,51 @@ export default function SabbathHealthApp() {
 
   // Check subscription status when user signs in
   useEffect(() => {
+    console.log('👤 === USER AUTH STATE CHANGED ===');
+    console.log('Is signed in:', isSignedIn);
+    console.log('User object exists:', !!user);
+    
     if (isSignedIn) {
+      console.log('✅ User is signed in, checking subscription...');
       checkSubscriptionStatus();
     } else {
+      console.log('❌ User is not signed in');
       setCheckingSubscription(false);
     }
   }, [isSignedIn, user]);
 
   const checkSubscriptionStatus = async () => {
     try {
+      console.log('🔍 === CHECKING SUBSCRIPTION STATUS ===');
       setCheckingSubscription(true);
+      
       const response = await fetch('/api/check-subscription');
+      console.log('📡 API Response status:', response.status);
+      
       const data = await response.json();
-      setHasActiveSubscription(data.hasActiveSubscription || false);
+      console.log('📦 API Response data:', data);
+      
+      const hasSubscription = data.hasActiveSubscription || false;
+      console.log('✅ Has subscription:', hasSubscription);
+      console.log('📝 Pending query:', pendingQuery);
+      console.log('🎯 Current state:', state);
+      
+      setHasActiveSubscription(hasSubscription);
+      
+      // If user now has a subscription and had a pending query, automatically perform search
+      if (hasSubscription && pendingQuery && state !== AppState.RESULTS) {
+        console.log('🎉 User subscribed! Automatically performing pending search:', pendingQuery);
+        performSearch(pendingQuery);
+        setPendingQuery(''); // Clear pending query after performing it
+      } else if (!hasSubscription) {
+        console.log('❌ No active subscription detected');
+      }
     } catch (error) {
-      console.error('Error checking subscription:', error);
+      console.error('❌ Error checking subscription:', error);
       setHasActiveSubscription(false);
     } finally {
       setCheckingSubscription(false);
+      console.log('🏁 Subscription check complete');
     }
   };
 
@@ -702,7 +733,7 @@ export default function SabbathHealthApp() {
       const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY });
       
       const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
+        model: 'gemini-2.0-flash', // Using the model from your available list
         contents: [
           {
             role: 'user',
@@ -728,7 +759,7 @@ export default function SabbathHealthApp() {
       }
 
     } catch (error) {
-      console.error(error);
+      console.error("Gemini Error:", error);
       setState(AppState.ERROR);
     } finally {
       setLoading(false);
@@ -736,13 +767,18 @@ export default function SabbathHealthApp() {
   };
 
   const handleSearchTrigger = (query: string) => {
-    console.log('Search triggered:', { query, isSignedIn, hasActiveSubscription });
+    console.log('🔎 === SEARCH TRIGGERED ===');
+    console.log('Query:', query);
+    console.log('Is signed in:', isSignedIn);
+    console.log('Has active subscription:', hasActiveSubscription);
+    console.log('Current state:', state);
     
     // Check if user is authenticated first
     if (!isSignedIn) {
       // Save the query for after sign-in
       setPendingQuery(query);
-      console.log('User not signed in, redirecting to sign-in page');
+      console.log('❌ User not signed in, redirecting to sign-in page');
+      console.log('💾 Saved pending query:', query);
       // Redirect to sign-in
       window.location.href = '/sign-in';
       return;
@@ -750,11 +786,13 @@ export default function SabbathHealthApp() {
 
     // User is authenticated, now check subscription
     if (!hasActiveSubscription) {
-      console.log('User authenticated but no subscription, showing paywall');
+      console.log('⚠️ User authenticated but no subscription');
+      console.log('💾 Saving query and redirecting to pricing:', query);
       setPendingQuery(query);
-      setState(AppState.PAYWALL);
+      // Redirect to pricing page instead of showing paywall
+      window.location.href = '/pricing';
     } else {
-      console.log('User has subscription, performing search');
+      console.log('✅ User has subscription, performing search');
       performSearch(query);
     }
   };

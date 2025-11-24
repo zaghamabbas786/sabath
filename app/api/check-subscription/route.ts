@@ -3,26 +3,44 @@ import { NextResponse } from 'next/server'
 
 export async function GET() {
   try {
+    console.log('=== CHECK SUBSCRIPTION API CALLED ===')
     const authResult = await auth()
     const userId = authResult.userId
     
+    console.log('1. User ID:', userId)
+    console.log('2. Auth result has() function exists:', !!authResult.has)
+    
     if (!userId) {
+      console.log('❌ No user ID - Unauthorized')
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Check if user has the required entitlement
-    // Clerk Billing automatically manages entitlements based on subscription status
-    const hasEntitlement = authResult.has ? 
-      await authResult.has({ permission: 'start_experience' }) : 
+    // Check if user has the required feature
+    // Clerk Billing automatically manages features based on subscription status
+    console.log('3. Checking for feature: start_experience')
+    
+    const hasFeature = authResult.has ? 
+      await authResult.has({ feature: 'start_experience' }) : 
       false
     
-    return NextResponse.json({ 
-      hasActiveSubscription: hasEntitlement,
+    console.log('4. Has feature result:', hasFeature)
+    console.log('5. Returning response:', { 
+      hasActiveSubscription: hasFeature,
       userId,
-      entitlement: hasEntitlement ? 'start_experience' : 'none'
+      feature: hasFeature ? 'start_experience' : 'none'
+    })
+    
+    return NextResponse.json({ 
+      hasActiveSubscription: hasFeature,
+      userId,
+      feature: hasFeature ? 'start_experience' : 'none',
+      debug: {
+        hasFunction: !!authResult.has,
+        checkedFeature: 'start_experience'
+      }
     })
   } catch (error) {
-    console.error('Error checking subscription:', error)
+    console.error('❌ Error checking subscription:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
