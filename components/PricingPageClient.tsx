@@ -14,7 +14,7 @@ export default function PricingPageClient() {
       </div>
     )
   }
-//pricec added
+
   return (
     <div className="min-h-screen bg-sabbath-cream flex flex-col">
       {/* Header */}
