@@ -399,7 +399,7 @@ const ResultView = ({ data, onReset }: { data: HealingResponse, onReset: () => v
       )}
 
       {/* Section 3: Spiritual Roots (Expanded & Stanza-based) */}
-      {data?.spiritual_roots?.length > 0 && (
+      {data.spiritual_roots?.length > 0 && (
       <section className="mb-24 bg-sabbath-ivory p-10 md:p-12 rounded-[2rem] border border-sabbath-subtle/50 relative overflow-hidden">
         <div className="absolute -top-20 -right-20 w-64 h-64 bg-sabbath-gold/10 rounded-full blur-3xl pointer-events-none"></div>
         
@@ -408,13 +408,13 @@ const ResultView = ({ data, onReset }: { data: HealingResponse, onReset: () => v
         </h3>
         
         <div className="space-y-10 relative z-10">
-          {data?.spiritual_roots?.map((stanza, i) => (
+          {data.spiritual_roots?.map((stanza, i) => (
             <div key={i}>
               <p className="text-sabbath-espresso/90 font-sans text-[19px] leading-[1.8] tracking-wide">
                 {stanza}
               </p>
               {/* Small separator between stanzas for visual breath */}
-              {i < data?.spiritual_roots?.length - 1 && (
+              {i < data.spiritual_roots?.length - 1 && (
                 <div className="w-12 h-[1px] bg-sabbath-gold/30 mt-10 mb-2"></div>
               )}
             </div>
